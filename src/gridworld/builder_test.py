@@ -20,19 +20,9 @@ class TestGridWorldBuilder(unittest.TestCase):
         ], GridWorldBuilder.pad_with(gridWorld, lambda: -1, (4, 4)))
 
     def test_improve_policy(self):
-        def iterate(builder):
-            for _ in range(10000000):
-                if -builder.iterate() < max_delta:
-                    break
 
         builder = GridWorldBuilder(4, 4)
-        builder.build()
-        max_delta = 0.001
-
-        while True:
-            iterate(builder)
-            if builder.improve():
-                break
+        builder.policy_iterate()
 
         cells = builder.cells
         for i in range(len(cells)):

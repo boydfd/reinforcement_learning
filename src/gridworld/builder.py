@@ -1,12 +1,14 @@
 from gridworld.action import create_normal_action
 from gridworld.cell import EndCell, Cell
+from mdp.builder import Builder
 
 
-class GridWorldBuilder:
+class GridWorldBuilder(Builder):
     def __init__(self, column_length, row_length):
         self.row_length = row_length
         self.column_length = column_length
         self.cells = None
+        self.build()
 
     def build(self):
         column_length = self.column_length
@@ -37,6 +39,9 @@ class GridWorldBuilder:
             for j in range(1, column_length):
                 cells[i][j].add_action(create_normal_action(cells[i][j + 1], 'right'))
 
+        for i in range(1, row_length + 1):
+            for j in range(1, column_length):
+                cells[i][j].sync_policy_and_actions()
         self.cells = cells
 
     @classmethod
@@ -49,17 +54,6 @@ class GridWorldBuilder:
 
         padded = list(map(pad_column, to_pad))
         return [padded_row] + padded + [padded_row]
-
-    def iterate(self):
-        self._foreach(lambda cell: cell.evaluate())
-        max_delta = max(list(self._foreach_return(lambda cell: cell.delta())))
-        self._foreach(lambda cell: cell.replace_old_value())
-        return max_delta
-
-    def improve(self):
-        self._foreach(lambda cell: cell.policy_improve())
-        foreach_return = list(self._foreach_return(lambda cell: cell.update_policy()))
-        return False not in foreach_return
 
     def _foreach(self, func):
         for i in range(1, self.row_length + 1):
