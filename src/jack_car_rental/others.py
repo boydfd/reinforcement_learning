@@ -87,14 +87,7 @@ def expected_return(state, action, state_value, constant_returned_cars):
             prob = poisson(rental_request_first_loc, RENTAL_REQUEST_FIRST_LOC) * \
                    poisson(rental_request_second_loc, RENTAL_REQUEST_SECOND_LOC)
 
-            if constant_returned_cars:
-                # get returned cars, those cars can be used for renting tomorrow
-                returned_cars_first_loc = RETURNS_FIRST_LOC
-                returned_cars_second_loc = RETURNS_SECOND_LOC
-                num_of_cars_first_loc = min(num_of_cars_first_loc + returned_cars_first_loc, MAX_CARS)
-                num_of_cars_second_loc = min(num_of_cars_second_loc + returned_cars_second_loc, MAX_CARS)
-                returns += prob * (reward + DISCOUNT * state_value[num_of_cars_first_loc, num_of_cars_second_loc])
-            else:
+            if not constant_returned_cars:
                 for returned_cars_first_loc in range(0, POISSON_UPPER_BOUND):
                     for returned_cars_second_loc in range(0, POISSON_UPPER_BOUND):
                         num_of_cars_first_loc_ = min(num_of_cars_first_loc + returned_cars_first_loc, MAX_CARS)
@@ -103,10 +96,17 @@ def expected_return(state, action, state_value, constant_returned_cars):
                                 poisson(returned_cars_second_loc, RETURNS_SECOND_LOC) * prob
                         returns += prob_ * (
                                 reward + DISCOUNT * state_value[num_of_cars_first_loc_, num_of_cars_second_loc_])
+            else:
+                # get returned cars, those cars can be used for renting tomorrow
+                returned_cars_first_loc = RETURNS_FIRST_LOC
+                returned_cars_second_loc = RETURNS_SECOND_LOC
+                num_of_cars_first_loc = min(num_of_cars_first_loc + returned_cars_first_loc, MAX_CARS)
+                num_of_cars_second_loc = min(num_of_cars_second_loc + returned_cars_second_loc, MAX_CARS)
+                returns += prob * (reward + DISCOUNT * state_value[num_of_cars_first_loc, num_of_cars_second_loc])
     return returns
 
 
-def figure_4_2(constant_returned_cars=True):
+def figure_4_2(constant_returned_cars=False):
     value = np.zeros((MAX_CARS + 1, MAX_CARS + 1))
     policy = np.zeros(value.shape, dtype=np.int)
 

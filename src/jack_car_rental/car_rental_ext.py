@@ -1,26 +1,11 @@
+from jack_car_rental.car_rental import CarRental
 from jack_car_rental.params import FEE_FOR_MOVING_A_CAR
-from mdp.state import State
 from mdp.action import Action
 from mdp.action_state import ActionState
-from .location_factory import location_factory
 from . import car_rental_factory
 
 
-class CarRental(State):
-    def __init__(self, num_f, num_s):
-        super().__init__()
-        self.first = location_factory.first[num_f]
-        self.second = location_factory.second[num_s]
-
-    def recalculate_actions(self):
-        # 5 4 3 ... 0 ... -4 -5
-        max_move = 5 if self.first.count >= 5 else self.first.count
-        min_move = -5 if -self.second.count <= -5 else -self.second.count
-        self.available_actions = {
-            self.get_action(movement): 1 for movement in range(min_move, max_move + 1)
-        }
-        self.balance_actions()
-        self.current_policy = {self.get_action(0): 1}
+class CarRentalExt(CarRental):
 
     def get_action(self, movement):
         reward = self.get_reward(movement)
@@ -34,15 +19,29 @@ class CarRental(State):
                 probability = f * s
                 if probability == 0:
                     continue
-                next_states[car_rental_factory.car_rental_factory.car_rentals[i][j]] = probability
+                next_state = car_rental_factory.car_rental_ext_factory.car_rentals[i][j]
+                reward -= next_state.first.get_extra_fee() * probability
+                reward -= next_state.second.get_extra_fee() * probability
+                next_states[next_state] = probability
 
         return Action(reward, ActionState(next_states, discount_rate=0.9), name=movement)
 
     def get_reward(self, movement):
         first_reward = self.first.calculate_rent_expectation_with_movement(movement)
         second_reward = self.second.calculate_rent_expectation_with_movement(-movement)
-        reward = first_reward + second_reward - abs(movement) * FEE_FOR_MOVING_A_CAR
+        reward = first_reward + second_reward - self.get_moving_cost(movement)
         return reward
+
+    @classmethod
+    def get_moving_cost(cls, movement):
+        move_from_first_to_second = movement > 0
+        if move_from_first_to_second:
+            return cls.calc_moving_cost_for(movement - 1)
+        return cls.calc_moving_cost_for(movement)
+
+    @staticmethod
+    def calc_moving_cost_for(movement):
+        return abs(movement) * FEE_FOR_MOVING_A_CAR
 
     def __str__(self):
         return '{}{}:{}->{}'.format(self.first.count, self.second.count, list(self.current_policy.keys()),

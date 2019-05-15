@@ -1,14 +1,13 @@
 from mdp.builder import Builder
-from .car_rental_factory import car_rental_factory
 import matplotlib.pyplot as plt
 
 
 class CarRentalBuilder(Builder):
-    def __init__(self, max_count=21):
+    def __init__(self, stats, max_count=21):
         self.max_count = max_count
         self.row_length = self.max_count
         self.column_length = self.max_count
-        self.stats = car_rental_factory.car_rentals
+        self.stats = stats
         self._foreach(lambda state: state.recalculate_actions())
 
     def _foreach(self, func):
