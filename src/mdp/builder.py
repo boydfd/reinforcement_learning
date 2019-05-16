@@ -1,12 +1,21 @@
+from .iterator.policy_iterator import PolicyIterator
+import time
+
+
 class Builder:
-    def _iterate(self):
+    def __init__(self, iterator=None):
+        if not iterator:
+            iterator = PolicyIterator
+        self.iterator = iterator(self)
+
+    def iterate(self):
         self._foreach(lambda cell: cell.evaluate())
         max_delta = sum(list(self._foreach_return(lambda cell: cell.delta())))
         self._foreach(lambda cell: cell.replace_old_value())
         print(max_delta)
         return abs(max_delta)
 
-    def _improve(self):
+    def improve(self):
         self._foreach(lambda cell: cell.policy_improve())
         foreach_return = list(self._foreach_return(lambda cell: cell.update_policy()))
         return False not in foreach_return
@@ -17,24 +26,14 @@ class Builder:
     def _foreach_return(self, func):
         return []
 
-    def value_iterate(self, max_delta=0.0001):
-        for _ in range(10000000):
-            if self._iterate() < max_delta:
-                self._print_value_iterate()
-                break
-            self._print_value_iterate()
-
     def policy_iterate(self):
-        while True:
-            self.value_iterate()
-            stable = self._improve()
-            self._print_policy()
-            print('policy improve')
-            if stable:
-                break
+        start = time.time()
+        self.iterator.iterate()
+        end = time. time()
+        print(end - start)
 
-    def _print_value_iterate(self):
+    def print_value_iterate(self):
         pass
 
-    def _print_policy(self):
+    def print_policy(self):
         pass

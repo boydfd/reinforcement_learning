@@ -74,7 +74,7 @@ class State:
         return [action.name for action in self.current_policy.keys()]
 
     def __str__(self):
-        return '{}:{}'.format(self.value, self.current_policy.keys())
+        return '{}:{}'.format(self.value, list(self.current_policy.keys()))
 
     def __repr__(self):
         return self.__str__()

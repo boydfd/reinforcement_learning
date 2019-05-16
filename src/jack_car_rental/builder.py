@@ -3,7 +3,8 @@ import matplotlib.pyplot as plt
 
 
 class CarRentalBuilder(Builder):
-    def __init__(self, stats, max_count=21):
+    def __init__(self, stats, iterator=None, max_count=21):
+        super().__init__(iterator)
         self.max_count = max_count
         self.row_length = self.max_count
         self.column_length = self.max_count
@@ -30,7 +31,7 @@ class CarRentalBuilder(Builder):
         plt.imshow(result, origin='lower')
         plt.show()
 
-    def _print_policy(self):
+    def print_policy(self):
         self.stats_to_2d()
 
     @classmethod
