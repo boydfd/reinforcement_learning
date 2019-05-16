@@ -20,6 +20,8 @@ class CarRental(State):
             self.get_action(movement): 1 for movement in range(min_move, max_move + 1)
         }
         self.balance_actions()
+
+    def init_policy(self):
         self.current_policy = {self.get_action(0): 1}
 
     def get_action(self, movement):

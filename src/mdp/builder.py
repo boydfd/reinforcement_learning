@@ -37,3 +37,6 @@ class Builder:
 
     def print_policy(self):
         pass
+
+    def print(self):
+        pass

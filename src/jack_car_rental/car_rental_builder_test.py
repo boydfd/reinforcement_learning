@@ -51,6 +51,6 @@ class CarRentalBuilderTest(unittest.TestCase):
 
         builder.stats_to_2d()
         self.assertEqual([5], stats[20][0].action_names())
-        self.assertEqual([-4], stats[0][20].action_names())
+        self.assertEqual([-5], stats[0][20].action_names())
         # self.assertEqual(['right'], stats[4][2].action_names())
         # self.assertEqual(['left', 'down'], stats[1][4].action_names())

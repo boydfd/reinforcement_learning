@@ -14,6 +14,9 @@ class State:
         self.name = name
         self.current_policy = {}
 
+    def init_policy(self):
+        self.current_policy = self.available_actions
+
     def add_action(self, action, possibility):
         self.available_actions[action] = possibility
 

@@ -5,6 +5,7 @@ from mdp.builder import Builder
 
 class GridWorldBuilder(Builder):
     def __init__(self, column_length, row_length):
+        super().__init__()
         self.row_length = row_length
         self.column_length = column_length
         self.cells = None
@@ -43,6 +44,8 @@ class GridWorldBuilder(Builder):
             for j in range(1, column_length):
                 cells[i][j].sync_policy_and_actions()
         self.cells = cells
+
+        self._foreach(lambda stat: stat.init_policy())
 
     @classmethod
     def pad_with(cls, to_pad, initial_value_generator, shape):

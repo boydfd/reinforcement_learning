@@ -10,6 +10,7 @@ class CarRentalBuilder(Builder):
         self.column_length = self.max_count
         self.stats = stats
         self._foreach(lambda state: state.recalculate_actions())
+        self._foreach(lambda stat: stat.init_policy())
 
     def _foreach(self, func):
         for i in range(self.row_length):

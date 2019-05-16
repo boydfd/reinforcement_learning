@@ -17,4 +17,5 @@ class PolicyIterator:
             print('policy improve')
             if stable:
                 self.builder.print_value_iterate()
+                self.builder.print()
                 break
