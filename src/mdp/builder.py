@@ -15,7 +15,7 @@ class Builder:
         print(max_delta)
         return abs(max_delta)
 
-    def improve(self):
+    def policy_improve(self):
         self._foreach(lambda cell: cell.policy_improve())
         foreach_return = list(self._foreach_return(lambda cell: cell.update_policy()))
         return False not in foreach_return
@@ -30,13 +30,13 @@ class Builder:
         start = time.time()
         self.iterator.iterate()
         end = time. time()
-        print(end - start)
+        print("time cost: {}".format(end - start))
 
-    def print_value_iterate(self):
+    def print_per_policy_evaluate(self):
         pass
 
-    def print_policy(self):
+    def print_per_policy_iterate(self):
         pass
 
-    def print(self):
+    def final_print(self):
         pass

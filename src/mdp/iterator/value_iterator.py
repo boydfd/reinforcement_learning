@@ -2,16 +2,16 @@ class ValueIterator:
     def __init__(self, builder):
         self.builder = builder
 
-    def value_iterate(self, max_delta=0.0001):
+    def policy_evaluate(self, max_delta=0.0001):
         delta = self.builder.iterate()
-        self.builder.print_value_iterate()
+        self.builder.print_per_policy_evaluate()
         return delta < max_delta
 
     def iterate(self):
         while True:
-            value_stable = self.value_iterate()
-            stable = self.builder.improve()
+            value_stable = self.policy_evaluate()
+            stable = self.builder.policy_improve()
             print('policy improve')
             if stable and value_stable:
-                self.builder.print_policy()
+                self.builder.print_per_policy_iterate()
                 break

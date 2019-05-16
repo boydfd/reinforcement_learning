@@ -16,6 +16,6 @@ class CapitalBuilder(Builder):
             result = func(self.stats[i])
             yield result
 
-    def print(self):
+    def final_print(self):
         for i in range(len(self.stats)):
             print(self.stats[i])

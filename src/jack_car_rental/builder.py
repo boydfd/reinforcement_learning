@@ -23,7 +23,7 @@ class CarRentalBuilder(Builder):
                 result = func(self.stats[i][j])
                 yield result
 
-    def print(self):
+    def final_print(self):
         for i in range(len(self.stats)):
             print(*self.stats[i])
 
@@ -32,7 +32,7 @@ class CarRentalBuilder(Builder):
         plt.imshow(result, origin='lower')
         plt.show()
 
-    def print_policy(self):
+    def print_per_policy_iterate(self):
         self.stats_to_2d()
 
     @classmethod

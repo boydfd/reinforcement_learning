@@ -2,20 +2,19 @@ class PolicyIterator:
     def __init__(self, builder):
         self.builder = builder
 
-    def value_iterate(self, max_delta=0.0001):
+    def policy_evaluate(self, max_delta=0.0001):
         for _ in range(10000000):
-            if self.builder.iterate() < max_delta:
-                # self.builder.print_value_iterate()
+            delta = self.builder.iterate()
+            self.builder.print_per_policy_evaluate()
+            if delta < max_delta:
                 break
-            # self.builder.print_value_iterate()
 
     def iterate(self):
         while True:
-            self.value_iterate()
-            stable = self.builder.improve()
-            self.builder.print_policy()
+            self.policy_evaluate()
+            stable = self.builder.policy_improve()
+            self.builder.print_per_policy_iterate()
             print('policy improve')
             if stable:
-                self.builder.print_value_iterate()
-                self.builder.print()
+                self.builder.final_print()
                 break
