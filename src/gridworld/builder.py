@@ -1,20 +1,14 @@
 from gridworld.action import create_normal_action
 from gridworld.cell import EndCell, Cell
 from mdp.builder import Builder
+from mdp.foreacher.foreacher_2d_padded import Foreacher2DPadded
 
 
 class GridWorldBuilder(Builder):
     def __init__(self, column_length, row_length):
-        super().__init__()
-        self.row_length = row_length
-        self.column_length = column_length
-        self.cells = None
-        self.build()
+        super().__init__(Foreacher2DPadded(self.build_cells(column_length, row_length), row_length, column_length))
 
-    def build(self):
-        column_length = self.column_length
-        row_length = self.row_length
-
+    def build_cells(self, column_length, row_length):
         cells = [[Cell(name='{}{}'.format(i, j)) for j in range(column_length)] for i in range(row_length)]
 
         cells = self.pad_with(cells, lambda: EndCell(), (row_length, column_length))
@@ -40,7 +34,7 @@ class GridWorldBuilder(Builder):
             for j in range(1, column_length):
                 cells[i][j].add_action(create_normal_action(cells[i][j + 1], 'right'))
 
-        self.cells = cells
+        return cells
 
     @classmethod
     def pad_with(cls, to_pad, initial_value_generator, shape):
@@ -52,16 +46,4 @@ class GridWorldBuilder(Builder):
 
         padded = list(map(pad_column, to_pad))
         return [padded_row] + padded + [padded_row]
-
-    def _foreach(self, func):
-        for i in range(1, self.row_length + 1):
-            for j in range(1, self.column_length + 1):
-                func(self.cells[i][j])
-
-    def _foreach_return(self, func):
-        for i in range(1, self.row_length + 1):
-            for j in range(1, self.column_length + 1):
-                result = func(self.cells[i][j])
-                if not ((i == 1 and j == 1) or (i == self.row_length and j == self.column_length)):
-                    yield result
 

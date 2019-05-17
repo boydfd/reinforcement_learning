@@ -1,27 +1,18 @@
+from jack_car_rental.params import MAX_CARS
 from mdp.builder import Builder
 import matplotlib.pyplot as plt
 
+from mdp.foreacher.foreacher_2d import Foreacher2D
+
 
 class CarRentalBuilder(Builder):
-    def __init__(self, stats, policy_iterator=None, max_count=21):
-        super().__init__(policy_iterator)
-        self.max_count = max_count
-        self.row_length = self.max_count
-        self.column_length = self.max_count
+    def __init__(self, stats, policy_iterator=None, max_count=MAX_CARS + 1):
+        self.row_length = max_count
+        self.column_length = max_count
+        super().__init__(Foreacher2D(stats, self.row_length, self.column_length), policy_iterator)
         self.stats = stats
         self._foreach(lambda state: state.recalculate_actions())
         self._foreach(lambda stat: stat.init_policy())
-
-    def _foreach(self, func):
-        for i in range(self.row_length):
-            for j in range(self.column_length):
-                func(self.stats[i][j])
-
-    def _foreach_return(self, func):
-        for i in range(self.row_length):
-            for j in range(self.column_length):
-                result = func(self.stats[i][j])
-                yield result
 
     def final_print(self):
         for i in range(len(self.stats)):

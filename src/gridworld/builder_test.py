@@ -24,7 +24,7 @@ class TestGridWorldBuilder(unittest.TestCase):
         builder = GridWorldBuilder(4, 4)
         builder.policy_iterate()
 
-        cells = builder.cells
+        cells = builder.foreacher.stats
         for i in range(len(cells)):
             print(*cells[i])
 

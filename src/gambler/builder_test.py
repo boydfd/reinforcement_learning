@@ -9,7 +9,7 @@ class CarRentalBuilderTest(unittest.TestCase):
         builder = CapitalBuilder(capital_factory.capitals)
         builder.policy_iterate()
 
-        stats = builder.stats
+        stats = builder.foreacher.stats
 
         self.assertEqual([50], stats[50].action_names())
         self.assertEqual([25], stats[25].action_names())

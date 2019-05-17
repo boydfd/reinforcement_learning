@@ -1,21 +1,10 @@
 from mdp.builder import Builder
+from mdp.foreacher.foreacher_1d import Foreacher1D
 
 
 class CapitalBuilder(Builder):
     def __init__(self, stats, policy_iterator=None, max_count=101):
-        super().__init__(policy_iterator)
-        self.max_count = max_count
-        self.stats = stats
-
-    def _foreach(self, func):
-        for i in range(self.max_count):
-                func(self.stats[i])
-
-    def _foreach_return(self, func):
-        for i in range(self.max_count):
-            result = func(self.stats[i])
-            yield result
+        super().__init__(Foreacher1D(stats, max_count), policy_iterator)
 
     def final_print(self):
-        for i in range(len(self.stats)):
-            print(self.stats[i])
+        self._foreach(lambda stat: print(stat))
