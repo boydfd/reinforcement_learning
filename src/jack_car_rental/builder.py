@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 
 
 class CarRentalBuilder(Builder):
-    def __init__(self, stats, iterator=None, max_count=21):
-        super().__init__(iterator)
+    def __init__(self, stats, policy_iterator=None, max_count=21):
+        super().__init__(policy_iterator)
         self.max_count = max_count
         self.row_length = self.max_count
         self.column_length = self.max_count

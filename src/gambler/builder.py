@@ -2,8 +2,8 @@ from mdp.builder import Builder
 
 
 class CapitalBuilder(Builder):
-    def __init__(self, stats, iterator=None, max_count=101):
-        super().__init__(iterator)
+    def __init__(self, stats, policy_iterator=None, max_count=101):
+        super().__init__(policy_iterator)
         self.max_count = max_count
         self.stats = stats
 

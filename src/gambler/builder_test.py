@@ -1,5 +1,4 @@
 from gambler import capital_factory
-from mdp.iterator.value_iterator import ValueIterator
 from .builder import CapitalBuilder
 import unittest
 

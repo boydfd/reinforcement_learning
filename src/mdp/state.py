@@ -14,6 +14,11 @@ class State:
         self.name = name
         self.current_policy = {}
 
+    def config_actions(self, actions):
+        self.available_actions = {action: 1 for action in actions}
+        self.balance_actions()
+        self.init_policy()
+
     def init_policy(self):
         self.current_policy = self.available_actions
 

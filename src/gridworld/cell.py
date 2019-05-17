@@ -12,6 +12,7 @@ class Cell(State):
     def add_action(self, action, possibility=None):
         self.available_actions[action] = 0
         self.balance_actions()
+        self.init_policy()
 
     def reset_possibility(self):
         keys_ = len(self.available_actions.keys())

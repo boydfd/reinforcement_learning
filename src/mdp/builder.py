@@ -1,12 +1,12 @@
-from .iterator.policy_iterator import PolicyIterator
+from .policy_iterator.policy_iterator import PolicyIterator
 import time
 
 
 class Builder:
-    def __init__(self, iterator=None):
-        if not iterator:
-            iterator = PolicyIterator
-        self.iterator = iterator(self)
+    def __init__(self, policy_iterator=None):
+        if not policy_iterator:
+            policy_iterator = PolicyIterator
+        self.policy_iterator = policy_iterator(self)
 
     def iterate(self):
         self._foreach(lambda cell: cell.evaluate())
@@ -28,7 +28,7 @@ class Builder:
 
     def policy_iterate(self):
         start = time.time()
-        self.iterator.iterate()
+        self.policy_iterator.iterate()
         end = time. time()
         print("time cost: {}".format(end - start))
 

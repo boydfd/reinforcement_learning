@@ -15,12 +15,11 @@ def action_state(result, capital, i):
 def recalculate_actions():
     result = [Capital(i) for i in range(100)] + [FinalCapital()]
     for capital in result:
-        capital.available_actions = {
-            Action(0, action_state(result, capital, i), name=i): 1 for i in
+        available_actions = [
+            Action(0, action_state(result, capital, i), name=i) for i in
             range(min(capital.count, 100 - capital.count) + 1)
-        }
-        capital.balance_actions()
-        capital.init_policy()
+        ]
+        capital.config_actions(available_actions)
     return result
 
 

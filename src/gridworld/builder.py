@@ -40,12 +40,7 @@ class GridWorldBuilder(Builder):
             for j in range(1, column_length):
                 cells[i][j].add_action(create_normal_action(cells[i][j + 1], 'right'))
 
-        for i in range(1, row_length + 1):
-            for j in range(1, column_length):
-                cells[i][j].sync_policy_and_actions()
         self.cells = cells
-
-        self._foreach(lambda stat: stat.init_policy())
 
     @classmethod
     def pad_with(cls, to_pad, initial_value_generator, shape):
