@@ -3,26 +3,28 @@ from mdp.state import State
 from mdp.action import Action
 from mdp.action_state import ActionState
 from .location_factory import location_factory
-from . import car_rental_factory
 
 
 class CarRental(State):
-    def __init__(self, num_f, num_s):
+    def __init__(self, num_f, num_s, factory):
         super().__init__()
         self.first = location_factory.first[num_f]
         self.second = location_factory.second[num_s]
+        self.factory = factory
+        self.init_action = None
 
-    def recalculate_actions(self):
+    def init_policy(self):
+        self.current_policy = {self.init_action: 1}
+
+    def init_actions(self):
         # 5 4 3 ... 0 ... -4 -5
         max_move = 5 if self.first.count >= 5 else self.first.count
         min_move = -5 if -self.second.count <= -5 else -self.second.count
-        self.available_actions = {
-            self.get_action(movement): 1 for movement in range(min_move, max_move + 1)
-        }
-        self.balance_actions()
-
-    def init_policy(self):
-        self.current_policy = {self.get_action(0): 1}
+        available_actions = [
+            self.get_action(movement) for movement in range(min_move, max_move + 1)
+        ]
+        self.init_action = available_actions[-min_move]
+        self.config_actions(available_actions)
 
     def get_action(self, movement):
         reward = self.get_reward(movement)
@@ -36,7 +38,7 @@ class CarRental(State):
                 probability = f * s
                 if probability == 0:
                     continue
-                next_states[car_rental_factory.car_rental_factory.car_rentals[i][j]] = probability
+                next_states[self.factory.get()[i][j]] = probability
 
         return Action(reward, ActionState(next_states, discount_rate=0.9), name=movement)
 

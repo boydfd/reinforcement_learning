@@ -7,7 +7,7 @@ from .car_rental_factory import car_rental_factory, car_rental_ext_factory
 class CarRentalBuilderTest(unittest.TestCase):
     def test_improve_policy1(self):
 
-        builder = CarRentalBuilder(car_rental_factory.car_rentals)
+        builder = CarRentalBuilder(car_rental_factory.get())
         builder.policy_iterate()
 
         stats = builder.stats
@@ -23,7 +23,7 @@ class CarRentalBuilderTest(unittest.TestCase):
 
     def test_improve_policy_value_iteration(self):
 
-        builder = CarRentalBuilder(car_rental_factory.car_rentals, ValueIterator)
+        builder = CarRentalBuilder(car_rental_factory.get(), ValueIterator)
         builder.policy_iterate()
 
         stats = builder.stats

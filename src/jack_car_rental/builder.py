@@ -11,8 +11,6 @@ class CarRentalBuilder(Builder):
         self.column_length = max_count
         super().__init__(Foreacher2D(stats, self.row_length, self.column_length), policy_iterator)
         self.stats = stats
-        self._foreach(lambda state: state.recalculate_actions())
-        self._foreach(lambda stat: stat.init_policy())
 
     def final_print(self):
         for i in range(len(self.stats)):

@@ -3,8 +3,10 @@ class ValueIterator:
         self.builder = builder
 
     def policy_evaluate(self, max_delta=0.0001):
-        delta = self.builder.iterate()
-        self.builder.print_per_policy_evaluate()
+        delta = 0
+        for i in range(20):
+            delta = self.builder.iterate()
+            self.builder.print_per_policy_evaluate()
         return delta < max_delta
 
     def iterate(self):

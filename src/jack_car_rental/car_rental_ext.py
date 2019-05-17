@@ -2,7 +2,6 @@ from jack_car_rental.car_rental import CarRental
 from jack_car_rental.params import FEE_FOR_MOVING_A_CAR
 from mdp.action import Action
 from mdp.action_state import ActionState
-from . import car_rental_factory
 
 
 class CarRentalExt(CarRental):
@@ -19,7 +18,7 @@ class CarRentalExt(CarRental):
                 probability = f * s
                 if probability == 0:
                     continue
-                next_state = car_rental_factory.car_rental_ext_factory.car_rentals[i][j]
+                next_state = self.factory.get()[i][j]
                 reward -= next_state.first.get_extra_fee() * probability
                 reward -= next_state.second.get_extra_fee() * probability
                 next_states[next_state] = probability
@@ -46,8 +45,3 @@ class CarRentalExt(CarRental):
     def __str__(self):
         return '{}{}:{}->{}'.format(self.first.count, self.second.count, list(self.current_policy.keys()),
                                     self.value)
-
-
-if __name__ == '__main__':
-    pass
-    # car_rental_factory[]
