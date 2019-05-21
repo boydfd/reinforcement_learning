@@ -3,7 +3,7 @@ class PolicyIterator:
         self.builder = builder
 
     def policy_evaluate(self, max_delta=0.0001):
-        for _ in range(10000000):
+        while True:
             delta = self.builder.iterate()
             self.builder.print_per_policy_evaluate()
             if delta < max_delta:
