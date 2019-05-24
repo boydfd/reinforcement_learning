@@ -54,6 +54,12 @@ class State:
         next_value = sum([action.evaluate() * possibility for action, possibility in self.current_policy.items()])
         self.next_value = next_value
 
+    def evaluate_inplace(self):
+        next_value = sum([action.evaluate() * possibility for action, possibility in self.current_policy.items()])
+        delta = next_value - self.value
+        self.value = next_value
+        return delta
+
     def delta(self):
         return self.next_value - self.value
 

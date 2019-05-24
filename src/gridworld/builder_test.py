@@ -3,30 +3,23 @@ from pprint import pprint
 from gridworld.builder import GridWorldBuilder
 import unittest
 
+from gridworld.cell_factory import CellFactory
+from mdp.builder import Builder
+from mdp.foreacher.foreacher_2d_padded import Foreacher2DPadded
+from mdp.policy_iterator.policy_iterator import PolicyIterator
+from mdp.printer.per_line_printer import PerLinePrinter
+
 
 class TestGridWorldBuilder(unittest.TestCase):
-    def test_paddedWith_4x4_6x6Returned(self):
-        gridWorld = [[0, -1, -1, -1, ],
-                     [1, -1, -1, -1, ],
-                     [1, -1, -1, -1, ],
-                     [1, -1, -1, 0, ], ]
-        self.assertEqual([
-            [-1, -1, -1, -1, -1, -1, ],
-            [-1, 0, -1, -1, -1, -1, ],
-            [-1, 1, -1, -1, -1, -1, ],
-            [-1, 1, -1, -1, -1, -1, ],
-            [-1, 1, -1, -1, 0, -1, ],
-            [-1, -1, -1, -1, -1, -1, ],
-        ], GridWorldBuilder.pad_with(gridWorld, lambda: -1, (4, 4)))
-
     def test_improve_policy(self):
 
-        builder = GridWorldBuilder(4, 4)
-        builder.policy_iterate()
-
-        cells = builder.foreacher.stats
-        for i in range(len(cells)):
-            print(*cells[i])
+        row_length = 4
+        column_length = 4
+        cells = CellFactory(row_length, column_length).cells
+        foreacher = Foreacher2DPadded(cells, row_length, column_length)
+        printer = PerLinePrinter(cells)
+        policy_iterator = PolicyIterator(foreacher, printer)
+        policy_iterator.iterate()
 
         self.assertEqual(['right'], cells[4][3].action_names())
         self.assertEqual(['right'], cells[4][2].action_names())

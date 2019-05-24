@@ -28,6 +28,3 @@ class CarRentalExtFactory:
     def get(self):
         return self.car_rentals
 
-
-car_rental_factory = CarRentalFactory()
-car_rental_ext_factory = CarRentalExtFactory()

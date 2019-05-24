@@ -1,20 +1,22 @@
-class PolicyIterator:
-    def __init__(self, builder):
-        self.builder = builder
+from mdp.policy_iterator.iterator import Iterator
+
+
+class PolicyIterator(Iterator):
 
     def policy_evaluate(self, max_delta=0.0001):
         while True:
-            delta = self.builder.iterate()
-            self.builder.print_per_policy_evaluate()
+            delta = self.evaluator.evaluate()
+            self.printer.print_per_policy_evaluate()
             if delta < max_delta:
                 break
 
-    def iterate(self):
+    def _iterate(self):
         while True:
             self.policy_evaluate()
-            stable = self.builder.policy_improve()
-            self.builder.print_per_policy_iterate()
+            stable = self.policy_improve()
+            self.printer.print_per_policy_iterate()
             print('policy improve')
             if stable:
-                self.builder.final_print()
+                self.printer.final_print()
                 break
+
