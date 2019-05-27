@@ -1,6 +1,6 @@
 from typing import Dict
 
-from .state import State
+from .state.state import State
 
 
 class ActionState:

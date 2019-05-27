@@ -1,7 +1,7 @@
 from typing import List
 
 from mdp.action import Action
-from mdp.state import State
+from mdp.state.state import State
 
 
 class Environment:

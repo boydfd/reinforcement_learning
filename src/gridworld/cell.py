@@ -2,7 +2,7 @@ from typing import Dict
 
 from gridworld.action import noop_action
 from mdp.action import Action
-from mdp.state import State
+from mdp.state.state import State
 
 
 class Cell(State):

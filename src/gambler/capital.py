@@ -1,4 +1,4 @@
-from mdp.state import State
+from mdp.state.state import State
 
 
 class Capital(State):

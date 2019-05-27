@@ -1,4 +1,4 @@
-from .action import Action
+from mdp.action import Action
 from typing import Dict
 import math
 

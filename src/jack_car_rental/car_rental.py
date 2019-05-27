@@ -1,5 +1,5 @@
 from jack_car_rental.params import FEE_FOR_MOVING_A_CAR
-from mdp.state import State
+from mdp.state.state import State
 from mdp.action import Action
 from mdp.action_state import ActionState
 from .location_factory import location_factory
