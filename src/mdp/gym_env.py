@@ -19,15 +19,16 @@ class States:
 
 
 class Env:
-    def __init__(self, env, discount_factor, epsilon):
+    def __init__(self, env, discount_factor, epsilon, action_type=FirstMCAction):
         self.env = env
         self.states = States(epsilon)
         self.discount_factor = discount_factor
+        self.action_type = action_type
 
     def to_v(self):
         return self.states.to_v()
 
-    def reset(self):
+    def reset(self) -> GymState:
         state = self.env.reset()
         self.add_state(state)
         return self.states.get(state)
@@ -40,5 +41,5 @@ class Env:
         return state, reward, done, info
 
     def add_state(self, state):
-        self.states.add_state(state, [FirstMCAction(self.discount_factor, name=action) for action in
+        self.states.add_state(state, [self.action_type(self.discount_factor, name=action) for action in
                                       range(self.env.action_space.n)])

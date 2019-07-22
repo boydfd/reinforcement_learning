@@ -29,6 +29,7 @@ class FirstMCAction:
         self.next_states = {}
         self.reward = 0
         self.count = 0
+        self.q = 0
         self.reward_calculator = RewardCalculator(discount_factor)
 
     def found_next_state(self, next_state, reward):
@@ -38,7 +39,8 @@ class FirstMCAction:
     def evaluate(self):
         if self.count == 0:
             return 0
-        return self.reward / self.count
+        self.q = self.reward / self.count
+        return self.q
 
     def cache_reward(self, reward):
         self.reward_calculator.cache_reward(reward)
