@@ -27,7 +27,7 @@ class BlackjackTest(TestBase):
             [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0],
         ]
         iterator = McOfflinePolicy()
-        iterator.run(5000000)
+        iterator.run(3000000)
 
         # blackjack_environment = BlackjackEnvironment()
         # blackjack_environment.monte_carlo_es()
