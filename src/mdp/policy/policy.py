@@ -1,9 +1,9 @@
 from typing import List
 
-from mdp.action.first_mc_action import FirstMCAction
+from mdp.action.gym_action import GymAction
 
 
 class Policy:
     @classmethod
-    def pick_action(cls, actions: List[FirstMCAction]) -> FirstMCAction:
+    def pick_action(cls, actions: List[GymAction]) -> GymAction:
         pass

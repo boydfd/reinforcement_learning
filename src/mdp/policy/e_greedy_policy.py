@@ -1,7 +1,9 @@
 import random
 
+from mdp.policy.policy import Policy
 
-class EGreedyPolicy:
+
+class EGreedyPolicy(Policy):
     def __init__(self, epsilon):
         self.epsilon = epsilon
 
@@ -9,7 +11,7 @@ class EGreedyPolicy:
         reward = -10e10
         action_max = -1
         for i, action in enumerate(actions):
-            action_reward = action.q
+            action_reward = action.evaluate()
             if action_reward > reward:
                 reward = action_reward
                 action_max = i

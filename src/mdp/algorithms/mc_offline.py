@@ -34,7 +34,7 @@ class McOfflinePolicy:
         state = self.env.reset()
         for t in range(100):
             action = state.get_next_action_state(policy)
-            next_state, reward, done, _ = self.env.step(action.name)
+            next_state, reward, done, _ = self.env.step(action.get_gym_action())
             actions.append((state, action, reward))
             if done:
                 break
@@ -48,6 +48,8 @@ class McOfflinePolicy:
             state = item[0]
             action = item[1]
             player, dealer, usable_a = state[0], state[1], state[2]
+            if player > 21:
+                continue
             if usable_a:
                 a_list[dealer - 1][player - 11] = action
             else:

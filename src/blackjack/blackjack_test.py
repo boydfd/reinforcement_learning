@@ -1,5 +1,3 @@
-from blackjack.blackjack_environment import BlackjackEnvironment, USABLE_A, NO_USABLE_A
-from mdp.algorithms.mc_online import McOnline
 from mdp.algorithms.mc_offline import McOfflinePolicy
 from test_base import TestBase
 

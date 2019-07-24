@@ -53,7 +53,6 @@ class FirstMCAction:
     def get_average_reward(self):
         return self.reward / self.count
 
-
     def __str__(self):
         return '{}:{}:{}'.format(self.name, self.evaluate(), self.count)
 

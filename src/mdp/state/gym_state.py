@@ -1,16 +1,16 @@
-import math
-import numpy as np
 from random import random, choices
 from typing import List
 
+import numpy as np
+
 from blackjack.utility import log
-from mdp.action.first_mc_action import FirstMCAction
+from mdp.action.gym_action import GymAction
 from mdp.policy.greedy_policy import GreedyPolicy
 from mdp.policy.policy import Policy
 
 
 class GymState:
-    def __init__(self, state, available_actions: List[FirstMCAction], name=None, epsilon=None):
+    def __init__(self, state, available_actions: List[GymAction], name=None, epsilon=None):
         self.state = state
         if len(available_actions) == 0:
             raise RuntimeError('available should not be empty')
@@ -23,7 +23,7 @@ class GymState:
         self.episode_cache_actions = set()
         self.epsilon = epsilon
 
-    def get_next_action_state(self, policy: Policy) -> FirstMCAction:
+    def get_next_action_state(self, policy: Policy) -> GymAction:
         return policy.pick_action(self.available_actions)
 
     def get_next_action(self):
@@ -67,10 +67,10 @@ class GymState:
         return self.available_actions[choices(range(action_length), actions)[0]]
 
     def to_v(self):
-        return np.array([action.q for action in self.available_actions])
+        return np.array([action.evaluate() for action in self.available_actions])
 
     def get_result(self):
-        return self.state, GreedyPolicy.pick_action(self.available_actions).name
+        return self.state, GreedyPolicy.pick_action(self.available_actions).get_gym_action()
 
     def __str__(self):
         # reward = -10e10

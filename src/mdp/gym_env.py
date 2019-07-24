@@ -10,6 +10,7 @@ class States:
     def add_state(self, state, actions):
         if state not in self.states:
             self.states[state] = GymState(state, actions, epsilon=self.epsilon)
+        return self.states[state]
 
     def get(self, state):
         return self.states[state]
@@ -19,11 +20,12 @@ class States:
 
 
 class Env:
-    def __init__(self, env, discount_factor, epsilon, action_type=FirstMCAction):
+    def __init__(self, env, discount_factor, epsilon, learning_rate=0.5, action_type=FirstMCAction):
         self.env = env
         self.states = States(epsilon)
         self.discount_factor = discount_factor
         self.action_type = action_type
+        self.learning_rate = learning_rate
 
     def to_v(self):
         return self.states.to_v()
@@ -35,11 +37,10 @@ class Env:
 
     def step(self, action):
         state, reward, done, info = self.env.step(action)
-        if not done:
-            self.add_state(state)
-            return self.states.get(state), reward, done, info
+        state = self.add_state(state)
         return state, reward, done, info
 
     def add_state(self, state):
-        self.states.add_state(state, [self.action_type(self.discount_factor, name=action) for action in
-                                      range(self.env.action_space.n)])
+        return self.states.add_state(state, [
+            self.action_type(self.discount_factor, action, learning_rate=self.learning_rate) for action in
+            range(self.env.action_space.n)])
