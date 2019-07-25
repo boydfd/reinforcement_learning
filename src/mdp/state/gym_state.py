@@ -23,6 +23,9 @@ class GymState:
         self.episode_cache_actions = set()
         self.epsilon = epsilon
 
+    def get_actions(self):
+        return self.available_actions
+
     def get_next_action_state(self, policy: Policy) -> GymAction:
         return policy.pick_action(self.available_actions)
 

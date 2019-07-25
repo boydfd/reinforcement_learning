@@ -4,6 +4,11 @@ from mdp.action.gym_action import GymAction
 
 
 class Policy:
-    @classmethod
-    def pick_action(cls, actions: List[GymAction]) -> GymAction:
+    def __init__(self, evaluate=lambda action: action.evaluate()):
+        self.evaluate = evaluate
+
+    def pick_action(self, actions: List[GymAction]) -> GymAction:
         pass
+
+    def evaluate_action(self, action):
+        return self.evaluate(action)

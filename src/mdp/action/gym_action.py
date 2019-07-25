@@ -6,8 +6,8 @@ class GymAction:
         self.learning_rate = learning_rate
         self.name = name
 
-    def update(self, reward, next_q_value):
-        self.q = self.q + self.learning_rate * (reward + self.discount_factor * next_q_value - self.q)
+    def update(self, reward, next_actions):
+        pass
 
     def evaluate(self):
         return self.q

@@ -4,14 +4,15 @@ from mdp.policy.policy import Policy
 
 
 class EGreedyPolicy(Policy):
-    def __init__(self, epsilon):
+    def __init__(self, epsilon, evaluate=lambda action: action.evaluate()):
+        super().__init__(evaluate)
         self.epsilon = epsilon
 
     def pick_action(self, actions):
         reward = -10e10
         action_max = -1
         for i, action in enumerate(actions):
-            action_reward = action.evaluate()
+            action_reward = self.evaluate_action(action)
             if action_reward > reward:
                 reward = action_reward
                 action_max = i

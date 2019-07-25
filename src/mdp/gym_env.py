@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from mdp.action.first_mc_action import FirstMCAction
 from mdp.state.gym_state import GymState
 
@@ -35,7 +37,7 @@ class Env:
         self.add_state(state)
         return self.states.get(state)
 
-    def step(self, action):
+    def step(self, action) -> Tuple[GymState, float, bool, dict]:
         state, reward, done, info = self.env.step(action)
         state = self.add_state(state)
         return state, reward, done, info
