@@ -1,5 +1,6 @@
 from lib.envs.blackjack import BlackjackEnv
 from mdp.algorithms.mc_offline import McOfflinePolicy
+from mdp.result_getter.blackjack_getter import BlackjackGetter
 from test_base import TestBase
 
 
@@ -32,4 +33,4 @@ class BlackjackTest(TestBase):
 
         # blackjack_environment = BlackjackEnvironment()
         # blackjack_environment.monte_carlo_es()
-        self.assertEqual(expect_usable_a, iterator.get_result())
+        self.assertEqual(expect_usable_a, BlackjackGetter(iterator.env).get())

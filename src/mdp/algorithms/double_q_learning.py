@@ -1,18 +1,14 @@
 import itertools
 
-import gym
-from tqdm import tqdm
 import numpy as np
+from tqdm import tqdm
 
 from lib import plotting
 from lib.envs.cliff_walking import CliffWalkingEnv
-from lib.envs.windy_gridworld import WindyGridworldEnv
 from mdp.action.double_q_action import DoubleQAction
-from mdp.action.gym_action import GymAction
 from mdp.algorithms.algorithm import Algorithm
 from mdp.gym_env import Env
 from mdp.policy.e_greedy_policy import EGreedyPolicy
-from mdp.policy.greedy_policy import GreedyPolicy
 
 
 class DoubleQLearning(Algorithm):
@@ -37,7 +33,6 @@ class DoubleQLearning(Algorithm):
                 state = next_state
 
         return stats
-
 
 
 if __name__ == '__main__':
