@@ -9,16 +9,13 @@ from lib.envs.cliff_walking import CliffWalkingEnv
 from lib.envs.windy_gridworld import WindyGridworldEnv
 from mdp.action.double_q_action import DoubleQAction
 from mdp.action.gym_action import GymAction
+from mdp.algorithms.algorithm import Algorithm
 from mdp.gym_env import Env
 from mdp.policy.e_greedy_policy import EGreedyPolicy
 from mdp.policy.greedy_policy import GreedyPolicy
 
 
-class DoubleQLearning:
-    def __init__(self, gym_env: gym.Env):
-        self.gym_env = gym_env
-        self.env = None
-
+class DoubleQLearning(Algorithm):
     def run(self, num_episodes, discount_factor=1, epsilon=0.1):
         self.env = Env(self.gym_env, discount_factor, epsilon, action_type=DoubleQAction)
         stats = plotting.EpisodeStats(
@@ -28,7 +25,7 @@ class DoubleQLearning:
             state_actions = set()
             state = self.env.reset()
             for t in itertools.count():
-                action_state = state.get_next_action_state(EGreedyPolicy(epsilon, lambda action: action.q1 + action.q2))
+                action_state = state.get_next_action_state(EGreedyPolicy(epsilon))
                 next_state, reward, done, _ = self.env.step(action_state.get_gym_action())
                 if state not in state_actions:
                     state_actions.add(action_state)
@@ -42,6 +39,9 @@ class DoubleQLearning:
         return stats
 
 
+
 if __name__ == '__main__':
-    stats = DoubleQLearning(CliffWalkingEnv()).run(500)
+    q_learning = DoubleQLearning(CliffWalkingEnv())
+    stats = q_learning.run(500)
     plotting.plot_episode_stats(stats)
+    q_learning.show_one_episode()

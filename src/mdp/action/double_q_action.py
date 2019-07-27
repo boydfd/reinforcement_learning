@@ -10,6 +10,9 @@ class DoubleQAction(GymAction):
         self.q1 = 0
         self.q2 = 0
 
+    def evaluate(self):
+        return self.q1 + self.q2
+
     def update(self, reward, next_actions):
         random_int = random.randint(0, 1)
         if random_int == 0:

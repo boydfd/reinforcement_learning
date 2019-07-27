@@ -2,17 +2,15 @@ from tqdm import tqdm
 
 from lib.envs.blackjack import BlackjackEnv
 from mdp.action.mc_offline_action import McOfflineAction
+from mdp.algorithms.algorithm import Algorithm
 from mdp.gym_env import Env
 from mdp.policy.greedy_policy import GreedyPolicy
 from mdp.policy.random_policy import RandomPolicy
 
 
-class McOfflinePolicy:
-    def __init__(self):
-        self.env = None
-
+class McOfflinePolicy(Algorithm):
     def run(self, num_episodes, discount_factor=1, epsilon=0.1):
-        self.env = Env(BlackjackEnv(), discount_factor, epsilon, action_type=McOfflineAction)
+        self.env = Env(self.gym_env, discount_factor, epsilon, action_type=McOfflineAction)
         for _ in tqdm(range(num_episodes)):
             action_states = self.generate_one_episode_action_states_by_policy(RandomPolicy())
             # for s in states:
@@ -55,3 +53,9 @@ class McOfflinePolicy:
             else:
                 no_a_list[dealer - 1][player - 11] = action
         return a_list + no_a_list
+
+
+if __name__ == '__main__':
+    iterator = McOfflinePolicy(BlackjackEnv())
+    iterator.run(3000000)
+    iterator.show_one_episode()

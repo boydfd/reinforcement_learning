@@ -37,6 +37,9 @@ class Env:
         self.add_state(state)
         return self.states.get(state)
 
+    def render(self, *args):
+        self.env.render(*args)
+
     def step(self, action) -> Tuple[GymState, float, bool, dict]:
         state, reward, done, info = self.env.step(action)
         state = self.add_state(state)

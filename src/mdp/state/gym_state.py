@@ -73,7 +73,7 @@ class GymState:
         return np.array([action.evaluate() for action in self.available_actions])
 
     def get_result(self):
-        return self.state, GreedyPolicy.pick_action(self.available_actions).get_gym_action()
+        return self.state, GreedyPolicy().pick_action(self.available_actions).get_gym_action()
 
     def __str__(self):
         # reward = -10e10

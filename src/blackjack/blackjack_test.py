@@ -1,3 +1,4 @@
+from lib.envs.blackjack import BlackjackEnv
 from mdp.algorithms.mc_offline import McOfflinePolicy
 from test_base import TestBase
 
@@ -26,8 +27,8 @@ class BlackjackTest(TestBase):
             [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0],
             [1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0],
         ]
-        iterator = McOfflinePolicy()
-        iterator.run(3000000)
+        iterator = McOfflinePolicy(BlackjackEnv())
+        iterator.run(30000)
 
         # blackjack_environment = BlackjackEnvironment()
         # blackjack_environment.monte_carlo_es()
