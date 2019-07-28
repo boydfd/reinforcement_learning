@@ -35,9 +35,9 @@ class GymState:
             self.episode_cache_actions.add(action)
         return action.get_gym_action()
 
-    def cache_reward(self, episode_reward):
+    def cache_reward(self, episode_reward, step):
         for action in self.episode_cache_actions:
-            action.cache_reward(episode_reward)
+            action.cache_reward(episode_reward, step)
 
     def update_reward(self):
         for action in self.episode_cache_actions:
@@ -76,21 +76,7 @@ class GymState:
         return self.state, GreedyPolicy().pick_action(self.available_actions).get_gym_action()
 
     def __str__(self):
-        # reward = -10e10
-        # action_max = []
-        # keys = self.available_actions
-        # for action in keys:
-        #     action_reward = action.evaluate()
-        #     if math.isclose(reward, action_reward, rel_tol=1e-010):
-        #         action_max.append(action)
-        #     if action_reward > reward:
-        #         reward = action_reward
-        #         action_max = [action]
-        # return '{}: {} -- {} -- next: {}'.format(self.name, keys, action_max, self.next_policy)
-        return ''
+        return '{}: {{a-> {}}}'.format(self.state, self.available_actions)
 
     def __repr__(self):
         return self.__str__()
-    # def print(self):
-    #     actions =  self.available_actions.keys()
-    #     log.log('{}: {} -- next: {}'.format(self.name, actions, self.next_policy))

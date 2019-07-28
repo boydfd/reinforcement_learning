@@ -1,5 +1,6 @@
 from tqdm import tqdm
 
+from lib.envs.cliff_walking import CliffWalkingEnv
 from mdp.action.mc_offline_action import McOfflineAction
 from mdp.algorithms.algorithm import Algorithm
 from mdp.gym_env import Env
@@ -8,7 +9,7 @@ from mdp.policy.random_policy import RandomPolicy
 
 
 class McOfflinePolicy(Algorithm):
-    def run(self, num_episodes, discount_factor=1, epsilon=0.1):
+    def run(self, num_episodes, discount_factor=0.8, epsilon=0.1):
         self.env = Env(self.gym_env, discount_factor, epsilon, action_type=McOfflineAction)
         for _ in tqdm(range(num_episodes)):
             action_states = self.generate_one_episode_action_states_by_policy(RandomPolicy())
@@ -36,4 +37,11 @@ class McOfflinePolicy(Algorithm):
                 break
             state = next_state
         return actions
+
+
+if __name__ == '__main__':
+    q_learning = McOfflinePolicy(CliffWalkingEnv())
+    q_learning.run(500000)
+    # plotting.plot_episode_stats(stats)
+    q_learning.show_one_episode()
 

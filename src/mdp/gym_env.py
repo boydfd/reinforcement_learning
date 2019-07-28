@@ -22,7 +22,7 @@ class States:
 
 
 class Env:
-    def __init__(self, env, discount_factor, epsilon, learning_rate=0.5, action_type=FirstMCAction):
+    def __init__(self, env, discount_factor, epsilon, learning_rate=0.05, action_type=FirstMCAction):
         self.env = env
         self.states = States(epsilon)
         self.discount_factor = discount_factor

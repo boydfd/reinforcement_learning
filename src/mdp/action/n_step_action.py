@@ -14,7 +14,7 @@ class NStepAction(GymAction):
             evaluated_action_value = next_action.evaluate()
         reward_calculator = self.reward_calculators[time_step]
         g = reward_calculator.get_reward() + reward_calculator.get_next_discount() * evaluated_action_value
-        self.q = self.learn(g)
+        self.learn(g)
         del self.reward_calculators[time_step]
 
     def cache_reward(self, reward, step=9e20):

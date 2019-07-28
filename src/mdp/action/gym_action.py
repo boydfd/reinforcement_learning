@@ -14,7 +14,8 @@ class RewardCalculator:
         self.reward_cache = self.INIT_REWARD_CACHE_VALUE
 
     def cache_reward(self, reward, time_step=9e20):
-        if self.initial_time_step >= time_step:
+        if self.initial_time_step <= time_step:
+            # print('cache {} {} {}'.format(self.initial_time_step, time_step, reward))
             self.reward_cache += reward * (self.discount_factor ** self.reward_cache_count)
             self.reward_cache_count += 1
 
@@ -38,7 +39,8 @@ class GymAction:
         pass
 
     def learn(self, g):
-        return self.q + self.learning_rate * (g - self.q)
+        self.q = self.q + self.learning_rate * (g - self.q)
+        self.learning_rate = self.learning_rate * 0.99
 
     def update(self, reward, next_actions, params=None):
         pass
@@ -54,3 +56,9 @@ class GymAction:
 
     def clear_reward_calculator(self):
         self.reward_calculators = {}
+
+    def __str__(self):
+        return '{}:{}'.format(self.get_gym_action(), self.evaluate())
+
+    def __repr__(self):
+        return self.__str__()

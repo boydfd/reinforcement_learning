@@ -33,9 +33,9 @@ class NStepSarsa(Algorithm):
                     action_state = state.get_next_action_state(EGreedyPolicy(epsilon))
                     action_state.add_reward_calculator(t)
                     next_state, reward, done, _ = self.env.step(action_state.get_gym_action())
-                    env_list.append((state, action_state, reward))
+                    env_list.append((state, action_state))
                     states.append(next_state)
-                    for _, a_s, _ in env_list[update_time + 1:]:
+                    for _, a_s in env_list[update_time + 1:]:
                         a_s.cache_reward(reward, step=t)
                     stats.episode_rewards[i_episode] += reward
                     stats.episode_lengths[i_episode] = t
@@ -53,14 +53,15 @@ class NStepSarsa(Algorithm):
                     else:
                         action_state_update_time.update(0, None, {'time_step': update_time})
                 if update_time == T - 1:
-                    for _, a_s, _ in env_list:
+                    a_ss = [a_s for _, a_s in env_list]
+                    for a_s in a_ss:
                         a_s.clear_reward_calculator()
                     break
         return stats
 
 
 if __name__ == '__main__':
-    q_learning = NStepSarsa(CliffWalkingEnv(), 10)
+    q_learning = NStepSarsa(CliffWalkingEnv(), 1)
     stats = q_learning.run(1000)
     plotting.plot_episode_stats(stats)
     q_learning.show_one_episode()
