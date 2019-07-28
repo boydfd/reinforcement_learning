@@ -1,3 +1,30 @@
+class RewardCalculator:
+    INIT_REWARD_CACHE_COUNT = 1
+    INIT_REWARD_CACHE_VALUE = 0
+
+    def __init__(self, discount_factor, initial_time_step=0):
+        self.discount_factor = discount_factor
+        self.reward_cache_count = None
+        self.reward_cache = None
+        self.initial_time_step = initial_time_step
+        self.init()
+
+    def init(self):
+        self.reward_cache_count = self.INIT_REWARD_CACHE_COUNT
+        self.reward_cache = self.INIT_REWARD_CACHE_VALUE
+
+    def cache_reward(self, reward, time_step=9e20):
+        if self.initial_time_step >= time_step:
+            self.reward_cache += reward * (self.discount_factor ** self.reward_cache_count)
+            self.reward_cache_count += 1
+
+    def get_next_discount(self):
+        return self.discount_factor ** (self.reward_cache_count + 1)
+
+    def get_reward(self):
+        return self.reward_cache
+
+
 class GymAction:
     def __init__(self, discount_factor, gym_value, name=None, learning_rate=0.5):
         self.discount_factor = discount_factor
@@ -5,8 +32,15 @@ class GymAction:
         self.q = 0
         self.learning_rate = learning_rate
         self.name = name
+        self.reward_calculators = {}
 
-    def update(self, reward, next_actions):
+    def cache_reward(self, reward, step=0):
+        pass
+
+    def learn(self, g):
+        return self.q + self.learning_rate * (g - self.q)
+
+    def update(self, reward, next_actions, params=None):
         pass
 
     def evaluate(self):
@@ -14,3 +48,9 @@ class GymAction:
 
     def get_gym_action(self):
         return self.gym_value
+
+    def add_reward_calculator(self, time_step):
+        self.reward_calculators[time_step] = RewardCalculator(self.discount_factor, time_step)
+
+    def clear_reward_calculator(self):
+        self.reward_calculators = {}

@@ -5,7 +5,7 @@ from mdp.policy.policy import Policy
 class GreedyPolicy(Policy):
     def pick_action(self, actions) -> GymAction:
         max_action = None
-        value = -9e9
+        value = -9e19
         for action in actions:
             evaluate = self.evaluate_action(action)
             if evaluate > value:

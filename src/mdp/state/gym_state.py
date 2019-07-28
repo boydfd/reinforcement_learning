@@ -33,7 +33,7 @@ class GymState:
         action = self._get_next_action()
         if action not in self.episode_cache_actions:
             self.episode_cache_actions.add(action)
-        return action.name
+        return action.get_gym_action()
 
     def cache_reward(self, episode_reward):
         for action in self.episode_cache_actions:
