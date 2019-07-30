@@ -9,7 +9,7 @@ class FirstMCAction(GymAction):
         index = min(self.reward_calculators.keys())
         self.reward_calculators[index].cache_reward(reward, step)
 
-    def update(self, reward, next_actions, params=None):
+    def update(self, reward, next_actions, **kwargs):
         index = min(self.reward_calculators.keys())
         g = self.reward_calculators[index].get_reward()
         self.learn(g)

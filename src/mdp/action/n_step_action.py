@@ -6,8 +6,8 @@ class NStepAction(GymAction):
     def __init__(self, discount_factor, gym_value, **kwargs):
         super().__init__(discount_factor, gym_value, **kwargs)
 
-    def update(self, reward_calculator, next_actions, params=None):
-        time_step = params['time_step']
+    def update(self, reward_calculator, next_actions, **kwargs):
+        time_step = kwargs['time_step']
         evaluated_action_value = 0
         if next_actions:
             next_action = GreedyPolicy().pick_action(next_actions)

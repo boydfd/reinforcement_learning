@@ -11,8 +11,8 @@ from mdp.policy.e_greedy_policy import EGreedyPolicy
 
 
 class McOnline(Algorithm):
-    def run(self, num_episodes, discount_factor=1, epsilon=0.3):
-        self.env = Env(self.gym_env, discount_factor, epsilon, action_type=FirstMCAction)
+    def run(self, num_episodes, discount_factor=1, epsilon=0.3, learning_rate=0.5):
+        self.env = Env(self.gym_env, discount_factor, epsilon, action_type=FirstMCAction, learning_rate=learning_rate)
         for _ in tqdm(range(num_episodes)):
             action_states = []
             state = self.env.reset()
@@ -31,7 +31,7 @@ class McOnline(Algorithm):
                     break
                 state = next_state
             for i, s in enumerate(action_states):
-                s.update(0, [], {'time_step': i})
+                s.update(0, [], time_step=i)
             for a_s in action_states:
                 a_s.clear_reward_calculator()
 
@@ -39,6 +39,6 @@ class McOnline(Algorithm):
 
 if __name__ == '__main__':
     q_learning = McOnline(CliffWalkingEnv())
-    q_learning.run(5000)
+    q_learning.run(500000, learning_rate=1)
     # plotting.plot_episode_stats(stats)
     q_learning.show_one_episode()

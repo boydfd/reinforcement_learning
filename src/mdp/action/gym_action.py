@@ -40,9 +40,15 @@ class GymAction:
 
     def learn(self, g):
         self.q = self.q + self.learning_rate * (g - self.q)
-        self.learning_rate = self.learning_rate * 0.99
+        self.learning_rate = self.anneal()
 
-    def update(self, reward, next_actions, params=None):
+    def anneal(self):
+        if self.learning_rate > 0.01:
+            return self.learning_rate * 0.99
+        else:
+            return self.learning_rate
+
+    def update(self, reward, next_actions, **kwargs):
         pass
 
     def evaluate(self):

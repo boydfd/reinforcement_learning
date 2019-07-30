@@ -13,7 +13,7 @@ class DoubleQAction(GymAction):
     def evaluate(self):
         return self.q1 + self.q2
 
-    def update(self, reward, next_actions):
+    def update(self, reward, next_actions, **kwargs):
         random_int = random.randint(0, 1)
         if random_int == 0:
             self.update_q1(reward, next_actions)
@@ -23,8 +23,10 @@ class DoubleQAction(GymAction):
     def update_q1(self, reward, next_actions):
         next_action_state = GreedyPolicy(lambda action: action.q2).pick_action(next_actions)
         self.q1 = self.q1 + self.learning_rate * (reward + self.discount_factor * next_action_state.q2 - self.q1)
+        self.learning_rate = self.anneal()
 
     def update_q2(self, reward, next_actions):
         next_action_state = GreedyPolicy(lambda action: action.q1).pick_action(next_actions)
         self.q2 = self.q2 + self.learning_rate * (reward + self.discount_factor * next_action_state.q1 - self.q2)
+        self.learning_rate = self.anneal()
 

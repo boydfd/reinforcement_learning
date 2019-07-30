@@ -6,6 +6,7 @@ from tqdm import tqdm
 
 from lib import plotting
 from lib.envs.cliff_walking import CliffWalkingEnv
+from lib.envs.windy_gridworld import WindyGridworldEnv
 from mdp.action.n_step_action import NStepAction
 from mdp.algorithms.algorithm import Algorithm
 from mdp.gym_env import Env
@@ -17,8 +18,8 @@ class NStepSarsa(Algorithm):
         super().__init__(gym_env)
         self.n = n
 
-    def run(self, num_episodes, discount_factor=1, epsilon=0.1):
-        self.env = Env(self.gym_env, discount_factor, epsilon, action_type=NStepAction)
+    def run(self, num_episodes, discount_factor=1, epsilon=0.1, learning_rate=0.5):
+        self.env = Env(self.gym_env, discount_factor, epsilon, action_type=NStepAction, learning_rate=learning_rate)
         stats = plotting.EpisodeStats(
             episode_lengths=np.zeros(num_episodes),
             episode_rewards=np.zeros(num_episodes))
@@ -49,9 +50,9 @@ class NStepSarsa(Algorithm):
                     evaluated_state_index = update_time + self.n - 1
                     if evaluated_state_index < len(states):
                         state_update_time = states[evaluated_state_index]
-                        action_state_update_time.update(0, state_update_time.get_actions(), {'time_step': update_time})
+                        action_state_update_time.update(0, state_update_time.get_actions(), time_step=update_time)
                     else:
-                        action_state_update_time.update(0, None, {'time_step': update_time})
+                        action_state_update_time.update(0, None, time_step=update_time)
                 if update_time == T - 1:
                     a_ss = [a_s for _, a_s in env_list]
                     for a_s in a_ss:
@@ -61,7 +62,11 @@ class NStepSarsa(Algorithm):
 
 
 if __name__ == '__main__':
-    q_learning = NStepSarsa(CliffWalkingEnv(), 1)
-    stats = q_learning.run(1000)
+    q_learning = NStepSarsa(CliffWalkingEnv(), 9)
+    stats = q_learning.run(2000)
     plotting.plot_episode_stats(stats)
     q_learning.show_one_episode()
+    # q_learning = NStepSarsa(WindyGridworldEnv(), 8)
+    # stats = q_learning.run(50000)
+    # plotting.plot_episode_stats(stats)
+    # q_learning.show_one_episode()

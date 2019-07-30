@@ -7,17 +7,15 @@ import numpy as np
 from lib import plotting
 from lib.envs.windy_gridworld import WindyGridworldEnv
 from mdp.action.gym_action import GymAction
+from mdp.action.sarsa_action import SarsaAction
+from mdp.algorithms.algorithm import Algorithm
 from mdp.gym_env import Env
 from mdp.policy.e_greedy_policy import EGreedyPolicy
 
 
-class Sarsa:
-    def __init__(self, gym_env: gym.Env):
-        self.gym_env = gym_env
-        self.env = None
-
-    def run(self, num_episodes, discount_factor=1, epsilon=0.1):
-        self.env = Env(self.gym_env, discount_factor, epsilon, action_type=GymAction)
+class Sarsa(Algorithm):
+    def run(self, num_episodes, discount_factor=1, epsilon=0.1, learning_rate=0.5):
+        self.env = Env(self.gym_env, discount_factor, epsilon, action_type=SarsaAction, learning_rate=learning_rate)
         stats = plotting.EpisodeStats(
             episode_lengths=np.zeros(num_episodes),
             episode_rewards=np.zeros(num_episodes))
@@ -31,14 +29,16 @@ class Sarsa:
                     state_actions.add(action_state)
                 stats.episode_rewards[i_episode] += reward
                 stats.episode_lengths[i_episode] = t
-                next_action_state = next_state.get_next_action_state(EGreedyPolicy(epsilon))
-                action_state.update(reward, next_action_state.evaluate())
+                action_state.update(reward, next_state.get_actions(), policy=EGreedyPolicy(epsilon))
                 if done:
                     break
                 state = next_state
 
         return stats
 
+
 if __name__ == '__main__':
-    stats = Sarsa(WindyGridworldEnv()).run(200)
+    sarsa = Sarsa(WindyGridworldEnv())
+    stats = sarsa.run(20000)
     plotting.plot_episode_stats(stats)
+    sarsa.show_one_episode()

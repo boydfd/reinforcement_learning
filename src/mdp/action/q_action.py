@@ -3,7 +3,9 @@ from mdp.policy.greedy_policy import GreedyPolicy
 
 
 class QAction(GymAction):
-    def update(self, reward, next_actions):
+    def update(self, reward, next_actions, **kwargs):
         next_q_value = GreedyPolicy().pick_action(next_actions).evaluate()
-        self.q = self.q + self.learning_rate * (reward + self.discount_factor * next_q_value - self.q)
+        # self.q = self.q + self.learning_rate * (reward + self.discount_factor * next_q_value - self.q)
+        g = reward + self.discount_factor * next_q_value
+        self.learn(g)
 
