@@ -29,6 +29,9 @@ class GymState:
     def get_next_action_state(self, policy: Policy) -> GymAction:
         return policy.pick_action(self.available_actions)
 
+    def get_action_probability(self, policy, action):
+        return policy.probabilities(self.available_actions)[action]
+
     def get_next_action(self):
         action = self._get_next_action()
         if action not in self.episode_cache_actions:

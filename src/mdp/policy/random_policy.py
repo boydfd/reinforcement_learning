@@ -1,7 +1,9 @@
 import random
 
+from mdp.policy.policy import Policy
 
-class RandomPolicy:
-    @classmethod
-    def pick_action(cls, actions):
-        return actions[random.randint(0, len(actions) - 1)]
+
+class RandomPolicy(Policy):
+    def probabilities(self, actions):
+        length = len(actions)
+        return [1 / length] * length

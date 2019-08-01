@@ -8,7 +8,7 @@ class EGreedyPolicy(Policy):
         super().__init__(evaluate)
         self.epsilon = epsilon
 
-    def pick_action(self, actions):
+    def probabilities(self, actions):
         reward = -10e10
         action_max = -1
         for i, action in enumerate(actions):
@@ -21,5 +21,5 @@ class EGreedyPolicy(Policy):
         single_prob = self.epsilon / action_length
         actions_pob = [single_prob for _ in range(action_length)]
         actions_pob[action_max] += 1 - self.epsilon
-        return actions[random.choices(range(action_length), actions_pob)[0]]
+        return actions_pob
 

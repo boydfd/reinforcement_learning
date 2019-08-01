@@ -1,14 +1,10 @@
 from mdp.action.gym_action import GymAction
+from mdp.policy.e_greedy_policy import EGreedyPolicy
 from mdp.policy.policy import Policy
 
 
 class GreedyPolicy(Policy):
-    def pick_action(self, actions) -> GymAction:
-        max_action = None
-        value = -9e19
-        for action in actions:
-            evaluate = self.evaluate_action(action)
-            if evaluate > value:
-                max_action = action
-                value = evaluate
-        return max_action
+    policy = EGreedyPolicy(0)
+
+    def probabilities(self, actions):
+        return self.policy.probabilities(actions)
