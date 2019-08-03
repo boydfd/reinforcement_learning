@@ -30,7 +30,7 @@ class GymState:
         return policy.pick_action(self.available_actions)
 
     def get_action_probability(self, policy, action):
-        return policy.probabilities(self.available_actions)[action]
+        return policy.action_to_probability(self.available_actions)[action]
 
     def get_next_action(self):
         action = self._get_next_action()

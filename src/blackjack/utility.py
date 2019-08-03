@@ -3,8 +3,8 @@ class Log:
         print(s)
         pass
 
-    def debug(self, s):
-        # print(s)
+    def debug(self, *s):
+        # print(*s)
         pass
 
 

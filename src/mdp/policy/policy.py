@@ -22,5 +22,6 @@ class Policy:
     def probabilities(self, actions):
         pass
 
-    def convert_into_action_to_probability(self, actions, prob):
+    @classmethod
+    def convert_into_action_to_probability(cls, actions, prob):
         return dict(zip(actions, prob))

@@ -1,3 +1,6 @@
+from blackjack.utility import log
+
+
 class RewardCalculator:
     INIT_REWARD_CACHE_COUNT = 1
     INIT_REWARD_CACHE_VALUE = 0
@@ -7,17 +10,25 @@ class RewardCalculator:
         self.reward_cache_count = None
         self.reward_cache = None
         self.initial_time_step = initial_time_step
+        self.importance_sampling_ratio = 1
         self.init()
 
     def init(self):
         self.reward_cache_count = self.INIT_REWARD_CACHE_COUNT
         self.reward_cache = self.INIT_REWARD_CACHE_VALUE
 
-    def cache_reward(self, reward, time_step=9e20):
+    def cache_reward(self, reward, time_step=9e20, **kwargs):
+        one_step_importance_sampling_ratio = kwargs['one_step_importance_sampling_ratio']
+        log.debug('isr: {:.2f} ->'.format(self.importance_sampling_ratio))
+        self.importance_sampling_ratio *= one_step_importance_sampling_ratio
+        log.debug('isr: {:.2f}'.format(self.importance_sampling_ratio))
         if self.initial_time_step <= time_step:
             # print('cache {} {} {}'.format(self.initial_time_step, time_step, reward))
             self.reward_cache += reward * (self.discount_factor ** self.reward_cache_count)
             self.reward_cache_count += 1
+
+    def get_importance_sampling_ratio(self):
+        return self.importance_sampling_ratio
 
     def get_next_discount(self):
         return self.discount_factor ** (self.reward_cache_count + 1)
@@ -35,7 +46,7 @@ class GymAction:
         self.name = name
         self.reward_calculators = {}
 
-    def cache_reward(self, reward, step=0):
+    def cache_reward(self, reward, step=0, one_step_importance_sampling_ratio=1):
         pass
 
     def learn(self, g):
@@ -43,7 +54,7 @@ class GymAction:
         self.learning_rate = self.anneal()
 
     def anneal(self):
-        if self.learning_rate > 0.01:
+        if self.learning_rate > 0.1:
             return self.learning_rate * 0.99
         else:
             return self.learning_rate

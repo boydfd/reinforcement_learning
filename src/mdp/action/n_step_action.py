@@ -1,3 +1,4 @@
+from blackjack.utility import log
 from mdp.action.gym_action import GymAction, RewardCalculator
 from mdp.policy.greedy_policy import GreedyPolicy
 
@@ -14,10 +15,21 @@ class NStepAction(GymAction):
             evaluated_action_value = next_action.evaluate()
         reward_calculator = self.reward_calculators[time_step]
         g = reward_calculator.get_reward() + reward_calculator.get_next_discount() * evaluated_action_value
-        self.learn(g)
+        log.debug('g: {}'.format(g))
+        self._learn(g, reward_calculator.get_importance_sampling_ratio())
         del self.reward_calculators[time_step]
 
-    def cache_reward(self, reward, step=9e20):
+    def _learn(self, g, importance_sampling_ratio):
+        # importance_sampling_ratio = 1
+        # print(importance_sampling_ratio)
+        log.debug('isr: {}'.format(importance_sampling_ratio))
+        if importance_sampling_ratio == 0:
+            return
+        self.q = self.q + self.learning_rate * importance_sampling_ratio * (g - self.q)
+        log.debug('q:{} '.format(self.q))
+        # self.learning_rate = self.anneal()
+
+    def cache_reward(self, reward, step=9e20, one_step_importance_sampling_ratio=1):
         for rc in self.reward_calculators.values():
-            rc.cache_reward(reward, step)
+            rc.cache_reward(reward, step, one_step_importance_sampling_ratio=one_step_importance_sampling_ratio)
 

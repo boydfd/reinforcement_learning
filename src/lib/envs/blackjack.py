@@ -111,6 +111,11 @@ class BlackjackEnv(gym.Env):
     def _get_obs(self):
         return (sum_hand(self.player), self.dealer[0], usable_ace(self.player))
 
+    def render(self, **kwargs):
+        # print(self.dealer)
+        # print(self.player)
+        print('{} {} {}'.format(self.player, self.dealer, usable_ace(self.player)))
+
     def _reset(self):
         self.dealer = draw_hand(self.np_random)
         self.player = draw_hand(self.np_random)
