@@ -38,7 +38,7 @@ class RewardCalculator:
 
 
 class GymAction:
-    def __init__(self, discount_factor, gym_value, name=None, learning_rate=0.5):
+    def __init__(self, discount_factor, gym_value, name=None, learning_rate=0.5, **kwargs):
         self.discount_factor = discount_factor
         self.gym_value = gym_value
         self.q = 0

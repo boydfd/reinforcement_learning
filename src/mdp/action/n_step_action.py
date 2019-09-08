@@ -6,6 +6,8 @@ from mdp.policy.greedy_policy import GreedyPolicy
 class NStepAction(GymAction):
     def __init__(self, discount_factor, gym_value, **kwargs):
         super().__init__(discount_factor, gym_value, **kwargs)
+        self.c = 0
+        self.get_learning_rate = kwargs['get_learning_rate'] or self._get_learning_rate
 
     def update(self, reward_calculator, next_actions, **kwargs):
         time_step = kwargs['time_step']
@@ -25,9 +27,13 @@ class NStepAction(GymAction):
         log.debug('isr: {}'.format(importance_sampling_ratio))
         if importance_sampling_ratio == 0:
             return
-        self.q = self.q + self.learning_rate * importance_sampling_ratio * (g - self.q)
+        self.c += importance_sampling_ratio
+        self.q = self.q + self.get_learning_rate(importance_sampling_ratio, self.c) * (g - self.q)
         log.debug('q:{} '.format(self.q))
         # self.learning_rate = self.anneal()
+
+    def _get_learning_rate(self, importance_sampling_ratio, c):
+        return importance_sampling_ratio / c
 
     def cache_reward(self, reward, step=9e20, one_step_importance_sampling_ratio=1):
         for rc in self.reward_calculators.values():

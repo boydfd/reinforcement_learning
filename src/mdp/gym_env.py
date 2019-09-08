@@ -22,12 +22,13 @@ class States:
 
 
 class Env:
-    def __init__(self, env, discount_factor, epsilon, learning_rate=0.05, action_type=FirstMCAction):
+    def __init__(self, env, discount_factor, epsilon, learning_rate=0.05, get_learning_rate=None, action_type=FirstMCAction):
         self.env = env
         self.states = States(epsilon)
         self.discount_factor = discount_factor
         self.action_type = action_type
         self.learning_rate = learning_rate
+        self.get_learning_rate = get_learning_rate
 
     def to_v(self):
         return self.states.to_v()
@@ -47,5 +48,10 @@ class Env:
 
     def add_state(self, state):
         return self.states.add_state(state, [
-            self.action_type(self.discount_factor, action, learning_rate=self.learning_rate) for action in
+            self.action_type(
+                self.discount_factor,
+                action,
+                learning_rate=self.learning_rate,
+                get_learning_rate=self.get_learning_rate
+            ) for action in
             range(self.env.action_space.n)])

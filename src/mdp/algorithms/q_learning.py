@@ -4,9 +4,10 @@ import gym
 import numpy as np
 from tqdm import tqdm
 
+from mdp.action.q_action import QAction
 from lib import plotting
 from lib.envs.cliff_walking import CliffWalkingEnv
-from mdp.action.q_action import QAction
+from lib.envs.windy_gridworld import WindyGridworldEnv
 from mdp.algorithms.algorithm import Algorithm
 from mdp.gym_env import Env
 from mdp.policy.e_greedy_policy import EGreedyPolicy
@@ -37,7 +38,7 @@ class QLearning(Algorithm):
 
 
 if __name__ == '__main__':
-    q_learning = QLearning(CliffWalkingEnv())
+    q_learning = QLearning(WindyGridworldEnv())
     stats = q_learning.run(200)
     plotting.plot_episode_stats(stats)
     q_learning.show_one_episode()

@@ -37,7 +37,7 @@ class OffNStepSarsa(Algorithm):
                     policy = EGreedyPolicy(epsilon)
                     action_state = state.get_next_action_state(policy)
                     b = state.get_action_probability(policy, action_state)
-                    pi = state.get_action_probability(EGreedyPolicy(0.1), action_state)
+                    pi = state.get_action_probability(EGreedyPolicy(0.01), action_state)
                     ratio = pi / b
                     log.debug('s:{}'.format(state))
                     log.debug('a:{}'.format(action_state))
@@ -78,8 +78,8 @@ class OffNStepSarsa(Algorithm):
 
 
 if __name__ == '__main__':
-    q_learning = OffNStepSarsa(WindyGridworldEnv(), 2)
-    stats = q_learning.run(20000)
+    q_learning = OffNStepSarsa(WindyGridworldEnv(), 1)
+    stats = q_learning.run(5000)
     plotting.plot_episode_stats(stats)
     q_learning.show_one_episode()
     # q_learning = NStepSarsa(WindyGridworldEnv(), 8)

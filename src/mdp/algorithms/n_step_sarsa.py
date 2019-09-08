@@ -18,8 +18,9 @@ class NStepSarsa(Algorithm):
         super().__init__(gym_env)
         self.n = n
 
-    def run(self, num_episodes, discount_factor=1, epsilon=0.1, learning_rate=0.5):
-        self.env = Env(self.gym_env, discount_factor, epsilon, action_type=NStepAction, learning_rate=learning_rate)
+    def run(self, num_episodes, discount_factor=1, epsilon=0.1, learning_rate=0.5, get_learning_rate=None):
+        self.env = Env(self.gym_env, discount_factor, epsilon, action_type=NStepAction, learning_rate=learning_rate,
+                       get_learning_rate=get_learning_rate)
         stats = plotting.EpisodeStats(
             episode_lengths=np.zeros(num_episodes),
             episode_rewards=np.zeros(num_episodes))
@@ -36,7 +37,8 @@ class NStepSarsa(Algorithm):
                     next_state, reward, done, _ = self.env.step(action_state.get_gym_action())
                     env_list.append((state, action_state))
                     states.append(next_state)
-                    for _, a_s in env_list[update_time + 1:]:
+                    accumulated_time = 0 if update_time + 1 < 0 else update_time + 1
+                    for _, a_s in env_list[accumulated_time:]:
                         a_s.cache_reward(reward, step=t)
                     stats.episode_rewards[i_episode] += reward
                     stats.episode_lengths[i_episode] = t
@@ -62,8 +64,8 @@ class NStepSarsa(Algorithm):
 
 
 if __name__ == '__main__':
-    q_learning = NStepSarsa(WindyGridworldEnv(), 11)
-    stats = q_learning.run(20000)
+    q_learning = NStepSarsa(CliffWalkingEnv(), 1)
+    stats = q_learning.run(200, get_learning_rate=lambda x1, x2: 1)
     plotting.plot_episode_stats(stats)
     q_learning.show_one_episode()
     # q_learning = NStepSarsa(WindyGridworldEnv(), 8)
