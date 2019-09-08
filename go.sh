@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+script_path="$( cd "$(dirname "$0")" ; pwd -P )"
 install() {
 echo start installing
 cat  << EOF > .envrc
@@ -9,6 +10,7 @@ then
     python3 -m venv .venv
 fi
 source .venv/bin/activate
+export PYTHONPATH=$script_path/src
 EOF
 direnv allow
 

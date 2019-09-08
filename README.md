@@ -10,14 +10,12 @@ brew install direnv
 brew install pyenv-virtualenv
 ```
 
-## config dir
+## install python and packages
 
 ```bash
 ./go.sh install
 ```
 
 ## run algorithm
-
-export $(pwd)/src
 python src/mdp/algorithms/q_learning.py
 
